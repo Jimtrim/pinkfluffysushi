@@ -20,14 +20,14 @@
 			diff = d.getDate() - day + (day > 5 ? (5+7) : 5); // adjust when day is friday
 
 			if ( day >= 5  && (  
-					(d.getHours() == 12 &&  d.getMinutes() >= 41) || d.getHours() > 12 
+					(d.getHours() == 11 &&  d.getMinutes() > 30) || d.getHours() > 11 
 				)) {
 				diff += 7;
 			}
 
 			result = new Date(d.setDate(diff));
-			result.setHours(12);
-			result.setMinutes(41);
+			result.setHours(11);
+			result.setMinutes(30);
 			result.setSeconds(0);
 			return result;
 		}
