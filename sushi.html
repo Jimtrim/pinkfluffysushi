@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>SUSHITIME!!!</title>
+	<meta name="description" content="">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css" rel="stylesheet">
+	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+	<script type="text/javascript">
+
+		var getNextFriday = function(d) {
+			d = new Date(d);
+			var day = d.getDay(),
+			diff = d.getDate() - day + (day==5 ? (5) : 5); // adjust when day is friday
+
+			if ( ( d.getHours() == 11 &&  d.getMinutes() >= 30 ) || d.getHours > 11) {
+				diff = 5+7;
+			}
+
+			result = new Date(d.setDate(diff));
+			result.setHours(11);
+			result.setMinutes(30);
+			result.setSeconds(0);
+			return result;
+		}
+
+		var getTimeString = function( seconds ) {
+			var d = Math.floor( seconds / 60 / 60 / 24)
+			var h = Math.floor( seconds / 60 / 60 % 24);
+			var m = Math.floor( seconds / 60 % 60 );
+			var s = Math.floor( seconds % 60 );
+			var result = '';
+
+			if (d > 0 )
+				result += d + " dager, ";
+
+			if (h > 0)
+				result += h + " timer, ";
+
+			if (h > 0 || m > 0)
+				result += m + " minutter og ";
+
+			result += s + " sekunder";
+			return result;
+		}
+
+		var getRemainingTime = function(target) {
+			return target -  Math.floor(new Date().getTime() / 1000) ;
+		}
+
+		var updateTimeContainer = function() {
+			jQuery('#countdown').find('h1').text( getTimeString( getRemainingTime( nextFriday ) ) );
+		}
+
+		var nextFriday = getNextFriday(Date.now()); // Mon Nov 08 2010
+		console.log(nextFriday);
+		var nextFriday = Math.floor( getNextFriday(Date.now()).getTime() / 1000 ); // Mon Nov 08 2010
+
+		(function($) {
+			$(document).on('ready', function() {
+				updateTimeContainer();
+				setInterval(updateTimeContainer, 20);
+			});
+		})(jQuery);
+	</script>
+
+<!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
+</head>
+<body>
+
+	<div class="container">
+		<div class="jumbotron">
+			<div id="countdown"><h1></h1></div>
+		</div>
+	</div>
+
+	<!-- Google Analytics: change UA-XXXXX-X to be your site's ID. -->
+<!--	<script>
+		(function(b,o,i,l,e,r){b.GoogleAnalyticsObject=l;b[l]||(b[l]=
+			function(){(b[l].q=b[l].q||[]).push(arguments)});b[l].l=+new Date;
+		e=o.createElement(i);r=o.getElementsByTagName(i)[0];
+		e.src='http://www.google-analytics.com/analytics.js';
+		r.parentNode.insertBefore(e,r)}(window,document,'script','ga'));
+		ga('create','UA-XXXXX-X');ga('send','pageview');
+	</script>
+	-->
+</body>
+</html>
