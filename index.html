@@ -15,19 +15,25 @@
 	<script type="text/javascript">
 
 		var getNextFriday = function(d) {
-			d = new Date(d);
+			d = new Date();
 			var day = d.getDay(),
-			diff = d.getDate() - day + (day==5 ? (5) : 5); // adjust when day is friday
+			diff = d.getDate() - day + (day > 5 ? (5+7) : 5); // adjust when day is friday
 
-			if ( ( d.getHours() == 11 &&  d.getMinutes() >= 30 ) || d.getHours > 11) {
-				diff = 5+7;
+			if ( day >= 5  && (  
+					(d.getHours() == 12 &&  d.getMinutes() >= 41) || d.getHours() > 12 
+				)) {
+				diff += 7;
 			}
 
 			result = new Date(d.setDate(diff));
-			result.setHours(11);
-			result.setMinutes(30);
+			result.setHours(12);
+			result.setMinutes(41);
 			result.setSeconds(0);
 			return result;
+		}
+
+		var getNextFridayTimestamp = function() {
+			return Math.floor(getNextFriday().getTime() / 1000 );
 		}
 
 		var getTimeString = function( seconds ) {
@@ -55,15 +61,20 @@
 		}
 
 		var updateTimeContainer = function() {
-			jQuery('#countdown').find('h1').text( getTimeString( getRemainingTime( nextFriday ) ) );
+			var remainingTime = getRemainingTime( nextFriday );
+			if (remainingTime <= 0) {
+				nextFriday = getNextFridayTimestamp();
+			}
+			jQuery('#countdown').find('h1').text( getTimeString( remainingTime ) );
 		}
 
 		var nextFriday = getNextFriday(Date.now()); // Mon Nov 08 2010
 		console.log(nextFriday);
-		var nextFriday = Math.floor( getNextFriday(Date.now()).getTime() / 1000 ); // Mon Nov 08 2010
+		var nextFriday = Math.floor( nextFriday.getTime() / 1000 ); // Convert to timestamp
 
 		(function($) {
 			$(document).on('ready', function() {
+
 				updateTimeContainer();
 				setInterval(updateTimeContainer, 20);
 			});
