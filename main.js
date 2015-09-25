@@ -75,7 +75,6 @@ $(document).keydown(konamiTrigger);
 
 function konamiTrigger(e) {
   kkeys.push( e.keyCode );
-  console.log(kkeys.toString());
   if ( kkeys.toString().indexOf( konami ) >= 0 ){
     $(document).unbind('keydown',arguments.callee);
     $.getScript('http://www.cornify.com/js/cornify.js',function(){
